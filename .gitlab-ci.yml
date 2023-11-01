@@ -1,0 +1,82 @@
+# You can copy and paste this template into a new `.gitlab-ci.yml` file.
+# You should not add this template to an existing `.gitlab-ci.yml` file by using the `include:` keyword.
+#
+# To contribute improvements to CI/CD templates, please follow the Development guide at:
+# https://docs.gitlab.com/ee/development/cicd/templates.html
+# This specific template is located at:
+# https://gitlab.com/gitlab-org/gitlab/-/blob/master/lib/gitlab/ci/templates/C++.gitlab-ci.yml
+
+# use the official gcc image, based on debian
+# can use versions as well, like gcc:5.2
+# see https://hub.docker.com/_/gcc/
+
+image: python_boilerplate_image
+
+variables:
+  GIT_DEPTH: 7
+  GIT_SUBMODULE_DEPTH: 3
+  GIT_SUBMODULE_STRATEGY: "recursive"
+  CI_DEBUG_SERVICES: "true"
+  FF_NETWORK_PER_BUILD: "true"
+stages:
+  - build
+  - test
+  - deploy
+
+
+# example_build:
+#   stage:
+#     build
+#   script:
+#     - apt update && apt install -y git build-essential cmake libboost-all-dev
+#     - cmake -B build -D CMAKE_BUILD_TYPE=Debug
+#     - cmake --build build
+#     - build/tests/example_test --gtest_shuffle --gtest_repeat=10
+#     - sleep 10
+#   artifacts:
+#       name: "$CI_JOB_NAME"
+#       paths:
+#         - build/tests/example_test
+#         - build/tests/second_example_test
+
+
+example_test:
+  stage:
+    test
+  script:
+    - cd tests
+    - pytest --durations 0 -v
+
+
+example_service:
+  stage:
+    test
+  services:
+    - name: postgres
+      alias: db
+  variables:
+    POSTGRES_DB: custom_db
+    POSTGRES_USER: custom_user
+    POSTGRES_PASSWORD: custom_pass
+  script:
+    - apt update && apt install python3 python-is-python3 pip -y
+    - pip install --upgrade pip
+    - pip install "psycopg[binary,pool]"
+    - pip install pgcli
+    - echo "SELECT VERSION();" | pgcli "postgresql://$POSTGRES_USER:$POSTGRES_PASSWORD@db:5432/$POSTGRES_DB"
+
+
+bind_build_python_boilerplate_image:
+  stage: build
+  image: docker:23.0.6
+  rules:
+    - when: manual
+  script:
+    - apk add bash git
+    - $CI_PROJECT_DIR/scripts/build_ci_base_image.sh $CI_COMMIT_SHA 
+    - $CI_PROJECT_DIR/scripts/export-binaries.sh python_boilerplate_image:$CI_COMMIT_SHA $CI_PROJECT_DIR/build
+    - docker builder prune --force
+  artifacts:
+      name: "$CI_JOB_NAME"
+      paths:
+        - build
