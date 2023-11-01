@@ -1,3 +1,5 @@
+from __future__ import annotations
+
+
 def get_hello_string() -> str:
-    str = "Hello World!"
-    return str
+    return "Hello World!"

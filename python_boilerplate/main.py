@@ -1,15 +1,15 @@
 from __future__ import annotations
-import logging
 
 import asyncio
+import logging
 
 from python_boilerplate.__private.one import get_hello_string
 
 
 async def _main() -> None:
-    str = get_hello_string()
-    logging.error(f"using python_boilerplate cli")
-    logging.error(str)
+    s = get_hello_string()
+    logging.error("using python_boilerplate cli")
+    logging.error(s)
 
 
 def main() -> None:

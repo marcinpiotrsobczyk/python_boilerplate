@@ -27,7 +27,7 @@ stages:
 
 lint_code_with_ruff:
   stage:
-    list
+    lint
   script:
     - poetry install
     - source $(poetry env info --path)/bin/activate
@@ -37,7 +37,7 @@ lint_code_with_ruff:
 
 formatting_with_black_check:
   stage:
-    list
+    lint
   script:
     - poetry install
     - source $(poetry env info --path)/bin/activate
@@ -46,7 +46,7 @@ formatting_with_black_check:
 
 type_check_with_mypy:
   stage:
-    list
+    lint
   script:
     - poetry install
     - source $(poetry env info --path)/bin/activate

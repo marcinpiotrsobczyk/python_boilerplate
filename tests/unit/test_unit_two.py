@@ -1,36 +1,35 @@
+from __future__ import annotations
+
 import logging
 
-from PIL import Image
 import pytest
+from PIL import Image
 
 from python_boilerplate.__private.one import get_hello_string
 
 
 @pytest.mark.parametrize("mine_param", ["a", "b", "c"])
-def test_case_one(some_string, mine_param) -> None:
-    logging.error(f"from unit_two suite")
+def test_case_one(some_string: str, mine_param: str) -> None:
+    logging.error("from unit_two suite")
     logging.warning(f"fixture first: {some_string}")
     logging.info(f"fixture second: {mine_param}")
-    logging.debug(f"example debug log")
+    logging.debug("example debug log")
 
 
 @pytest.mark.parametrize("mine_param", ["x", "y", "z"])
-def test_case_two(some_string, mine_param) -> None:
-    logging.info(f"from unit_two suite")
+def test_case_two(some_string: str, mine_param: str) -> None:
+    logging.info("from unit_two suite")
     logging.info(f"fixture first: {some_string}")
     logging.info(f"fixture second: {mine_param}")
 
 
-def test_case_three(some_string) -> None:
-    logging.info(f"from unit_two suite")
-    img  = Image.new(
-        mode = "RGB",
-        size = (400, 300),
-        color = (255, 0, 0))
+def test_case_three() -> None:
+    logging.info("from unit_two suite")
+    img = Image.new(mode="RGB", size=(400, 300), color=(255, 0, 0))
     img.save("red-color-image.jpg")
 
 
-def test_case_four(some_string) -> None:
-    logging.info(f"from unit_two suite")
-    str = get_hello_string()
-    logging.warning(str)
+def test_case_four() -> None:
+    logging.info("from unit_two suite")
+    s = get_hello_string()
+    logging.warning(s)
