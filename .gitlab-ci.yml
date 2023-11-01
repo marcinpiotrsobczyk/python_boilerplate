@@ -19,9 +19,40 @@ variables:
   CI_DEBUG_SERVICES: "true"
   FF_NETWORK_PER_BUILD: "true"
 stages:
-  - build
+  - lint
   - test
   - deploy
+
+#>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>| STATIC CODE ANALYSIS |>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+lint_code_with_ruff:
+  stage:
+    list
+  script:
+    - poetry install
+    - source $(poetry env info --path)/bin/activate
+    - ruff .
+    - ruff --diff .
+  
+
+formatting_with_black_check:
+  stage:
+    list
+  script:
+    - poetry install
+    - source $(poetry env info --path)/bin/activate
+    - black --check --diff --color .
+
+
+type_check_with_mypy:
+  stage:
+    list
+  script:
+    - poetry install
+    - source $(poetry env info --path)/bin/activate
+    - mypy .
+
+#<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<| STATIC CODE ANALYSIS |<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
 # example_build:
@@ -44,8 +75,13 @@ example_test:
   stage:
     test
   script:
-    - cd tests
+    - poetry install
+    - source $(poetry env info --path)/bin/activate
     - pytest --durations 0 -v
+  artifacts:
+    paths:
+      - red-color-image.jpg
+    when: always
 
 
 example_service:
@@ -67,14 +103,14 @@ example_service:
 
 
 bind_build_python_boilerplate_image:
-  stage: build
+  stage: deploy
   image: docker:23.0.6
+  needs: []
   rules:
     - when: manual
   script:
     - apk add bash git
-    - $CI_PROJECT_DIR/scripts/build_ci_base_image.sh $CI_COMMIT_SHA 
-    - $CI_PROJECT_DIR/scripts/export-binaries.sh python_boilerplate_image:$CI_COMMIT_SHA $CI_PROJECT_DIR/build
+    - $CI_PROJECT_DIR/scripts/build_ci_base_image.sh $CI_COMMIT_SHA
     - docker builder prune --force
   artifacts:
       name: "$CI_JOB_NAME"

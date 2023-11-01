@@ -34,15 +34,10 @@ RUN apt update && apt install -y \
     postgresql-client \
     xvfb && rm -rf /var/lib/apt/lists/*
 
-RUN curl -sSL https://install.python-poetry.org | python -  # install poetry in an isolated environment
-RUN export PATH="/root/.local/bin:$PATH"
+RUN curl -sSL https://install.python-poetry.org | python3 -  # install poetry in an isolated environment
+ENV PATH="${PATH}:/root/.local/bin"
 
-FROM python_boilerplate_base_image AS build
+FROM python_boilerplate_base_image AS python_boilerplate_image
 
 COPY . /src
 RUN cd /src && git clean -xfd
-RUN cmake -S /src -B /build -D CMAKE_BUILD_TYPE=Debug && cmake --build /build
-
-FROM python_boilerplate_base_image AS python_boilerplate_image
-COPY --from=build /src /src
-COPY --from=build /build /build
