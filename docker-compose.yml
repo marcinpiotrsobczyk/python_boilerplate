@@ -1,0 +1,76 @@
+services:
+  gitlabserver:
+    image:
+      gitlab/gitlab-ce:16.7.4-ce.0
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ${GITLAB_ROOT:-/python_boilerplate_gitlab}/gitlabserver/config:/etc/gitlab
+      - ${GITLAB_ROOT:-/python_boilerplate_gitlab}/gitlabserver/logs:/var/log/gitlab
+      - ${GITLAB_ROOT:-/python_boilerplate_gitlab}/gitlabserver/data:/var/opt/gitlab
+    shm_size: '256m'
+    # hostname:
+    #   gitlab.example.com    environment:
+    # GITLAB_OMNIBUS_CONFIG: |
+    #  external_url 'https://gitlab.example.com'
+    #  # Add any other gitlab.rb configuration here, each on its own line
+    networks:
+      gitlabnetwork:
+        ipv4_address: 172.21.0.2
+
+
+  gitlabrunner0:
+    image:
+      gitlab/gitlab-runner:alpine3.17-v16.7.1
+    volumes:
+      - ${GITLAB_ROOT:-/python_boilerplate_gitlab}/gitlabrunner0/config:/etc/gitlab-runner
+      - /run/docker.sock:/var/run/docker.sock
+    networks:
+      gitlabnetwork:
+        ipv4_address: 172.21.0.3
+
+
+  gitlabrunner1:
+    image:
+      gitlab/gitlab-runner:alpine3.17-v16.7.1
+    volumes:
+      - ${GITLAB_ROOT:-/python_boilerplate_gitlab}/gitlabrunner1/config:/etc/gitlab-runner
+      - /run/docker.sock:/var/run/docker.sock
+    networks:
+      gitlabnetwork:
+        ipv4_address: 172.21.0.4
+
+
+  prometheus:
+    image: prom/prometheus:v2.37.6
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+    volumes:
+      - ./prometheus:/etc/prometheus
+      - ${GITLAB_ROOT:-/python_boilerplate_gitlab}/prometheus:/prometheus
+    networks:
+      gitlabnetwork:
+        ipv4_address: 172.21.0.6
+
+
+  grafana:
+    image: grafana/grafana:9.4.3-ubuntu
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+    volumes:
+      - ./grafana/provisioning:/etc/grafana/provisioning/datasources
+      - ${GITLAB_ROOT:-/python_boilerplate_gitlab}/grafana:/var/lib/grafana
+    networks:
+      gitlabnetwork:
+        ipv4_address: 172.21.0.7
+
+
+networks:
+  gitlabnetwork:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.21.0.0/16
+          gateway: 172.21.0.1
