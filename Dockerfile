@@ -46,3 +46,4 @@ FROM python_boilerplate_base_image AS python_boilerplate_image
 
 COPY . /src
 RUN cd /src && git clean -xfd
+WORKDIR /src
