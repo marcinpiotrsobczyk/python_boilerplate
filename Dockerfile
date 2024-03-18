@@ -37,6 +37,11 @@ RUN apt update && apt install -y \
 RUN curl -sSL https://install.python-poetry.org | python3 -  # install poetry in an isolated environment
 ENV PATH="${PATH}:/root/.local/bin"
 
+RUN wget -O /bin/hadolint https://github.com/hadolint/hadolint/releases/download/v1.16.3/hadolint-Linux-x86_64
+
+RUN chmod +x /bin/hadolint
+
+
 FROM python_boilerplate_base_image AS python_boilerplate_image
 
 COPY . /src
