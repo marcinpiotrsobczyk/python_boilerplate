@@ -114,11 +114,11 @@ new_password="p455w0rd"
 set_new_root_password "$new_password"
 echo "new root password: $new_password"
 
-# create personal access token programmaticaly
+# create personal access token programmatically
 personal_access_token=$(obtain_personal_access_token)
 echo "personal access token: ${personal_access_token}"
 
-# create runner authentication token programmaticaly
+# create runner authentication token programmatically
 runner_authentication_token0=$(obtain_runner_authentication_token "$personal_access_token")
 echo "runner authentication token 0: ${runner_authentication_token0}"
 
@@ -145,7 +145,7 @@ docker run --rm -it --ip 172.21.0.3 --network python_boilerplate_gitlabnetwork \
     --token "$runner_authentication_token0"
 
 
-# create runner authentication token programmaticaly
+# create runner authentication token programmatically
 runner_authentication_token1=$(obtain_runner_authentication_token "$personal_access_token")
 echo "runner authentication token 0: ${runner_authentication_token1}"
 

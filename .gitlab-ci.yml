@@ -53,7 +53,7 @@ lint_code_with_ruff:
     - source $(poetry env info --path)/bin/activate
     - ruff .
     - ruff --diff .
-  
+
 
 formatting_with_black_check:
   stage:
