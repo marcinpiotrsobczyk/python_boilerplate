@@ -10,8 +10,6 @@
 # can use versions as well, like gcc:5.2
 # see https://hub.docker.com/_/gcc/
 
-image: python_boilerplate_image
-
 variables:
   GIT_DEPTH: 7
   GIT_SUBMODULE_DEPTH: 3
@@ -122,7 +120,7 @@ example_service:
     - echo "SELECT VERSION();" | pgcli "postgresql://$POSTGRES_USER:$POSTGRES_PASSWORD@db:5432/$POSTGRES_DB"
 
 
-bind_build_python_boilerplate_image:
+bind_build_image:
   stage: deploy
   image: docker:23.0.6
   needs: []
@@ -130,7 +128,8 @@ bind_build_python_boilerplate_image:
     - when: manual
   script:
     - apk add bash git
-    - $CI_PROJECT_DIR/scripts/build_ci_base_image.sh $CI_COMMIT_SHA
+    - source $CI_PROJECT_DIR/.gitlab.env
+    - $CI_PROJECT_DIR/scripts/build_ci_base_image.sh
     - docker builder prune --force
   artifacts:
       name: "$CI_JOB_NAME"

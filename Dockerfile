@@ -1,6 +1,8 @@
-FROM ubuntu:22.04 AS python_boilerplate_base_image
+FROM ubuntu:22.04 AS base_image
 
-RUN apt update && apt install -y \
+RUN apt-get update && \
+    apt-get install -y \
+    bats \
     git \
     cmake \
     make \
@@ -14,7 +16,7 @@ RUN apt update && apt install -y \
     screen \
     python3 \
     python3-pip \
-    python-is-python3 \
+    python3-venv \
     libluajit-5.1-dev \
     libmysqlclient-dev \
     libboost-system-dev \
@@ -32,7 +34,8 @@ RUN apt update && apt install -y \
     iputils-ping \
     ncat \
     postgresql-client \
-    xvfb && rm -rf /var/lib/apt/lists/*
+    xvfb && \
+    rm -rf /var/lib/apt/lists/*
 
 RUN curl -sSL https://install.python-poetry.org | python3 -  # install poetry in an isolated environment
 ENV PATH="${PATH}:/root/.local/bin"
@@ -42,8 +45,8 @@ RUN wget -O /bin/hadolint https://github.com/hadolint/hadolint/releases/download
 RUN chmod +x /bin/hadolint
 
 
-FROM python_boilerplate_base_image AS python_boilerplate_image
+FROM base_image AS image
 
-COPY . /src
+ADD . /src
 RUN cd /src && git clean -xfd
 WORKDIR /src

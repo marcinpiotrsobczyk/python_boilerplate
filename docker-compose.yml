@@ -6,9 +6,9 @@ services:
       - "80:80"
       - "443:443"
     volumes:
-      - ${GITLAB_ROOT:-/python_boilerplate_gitlab}/gitlabserver/config:/etc/gitlab
-      - ${GITLAB_ROOT:-/python_boilerplate_gitlab}/gitlabserver/logs:/var/log/gitlab
-      - ${GITLAB_ROOT:-/python_boilerplate_gitlab}/gitlabserver/data:/var/opt/gitlab
+      - ${GITLAB_ROOT:-/boilerplate_gitlab}/gitlabserver/config:/etc/gitlab
+      - ${GITLAB_ROOT:-/boilerplate_gitlab}/gitlabserver/logs:/var/log/gitlab
+      - ${GITLAB_ROOT:-/boilerplate_gitlab}/gitlabserver/data:/var/opt/gitlab
     shm_size: '256m'
     # hostname:
     #   gitlab.example.com    environment:
@@ -17,29 +17,29 @@ services:
     #  # Add any other gitlab.rb configuration here, each on its own line
     networks:
       gitlabnetwork:
-        ipv4_address: 172.21.0.2
+        ipv4_address: 172.20.0.2
 
 
   gitlabrunner0:
     image:
       gitlab/gitlab-runner:alpine3.17-v16.7.1
     volumes:
-      - ${GITLAB_ROOT:-/python_boilerplate_gitlab}/gitlabrunner0/config:/etc/gitlab-runner
+      - ${GITLAB_ROOT:-/boilerplate_gitlab}/gitlabrunner0/config:/etc/gitlab-runner
       - /run/docker.sock:/var/run/docker.sock
     networks:
       gitlabnetwork:
-        ipv4_address: 172.21.0.3
+        ipv4_address: 172.20.0.3
 
 
   gitlabrunner1:
     image:
       gitlab/gitlab-runner:alpine3.17-v16.7.1
     volumes:
-      - ${GITLAB_ROOT:-/python_boilerplate_gitlab}/gitlabrunner1/config:/etc/gitlab-runner
+      - ${GITLAB_ROOT:-/boilerplate_gitlab}/gitlabrunner1/config:/etc/gitlab-runner
       - /run/docker.sock:/var/run/docker.sock
     networks:
       gitlabnetwork:
-        ipv4_address: 172.21.0.4
+        ipv4_address: 172.20.0.4
 
 
   prometheus:
@@ -48,10 +48,10 @@ services:
       - '--config.file=/etc/prometheus/prometheus.yml'
     volumes:
       - ./prometheus:/etc/prometheus
-      - ${GITLAB_ROOT:-/python_boilerplate_gitlab}/prometheus:/prometheus
+      - ${GITLAB_ROOT:-/boilerplate_gitlab}/prometheus:/prometheus
     networks:
       gitlabnetwork:
-        ipv4_address: 172.21.0.6
+        ipv4_address: 172.20.0.6
 
 
   grafana:
@@ -61,10 +61,10 @@ services:
       - GF_SECURITY_ADMIN_PASSWORD=admin
     volumes:
       - ./grafana/provisioning:/etc/grafana/provisioning/datasources
-      - ${GITLAB_ROOT:-/python_boilerplate_gitlab}/grafana:/var/lib/grafana
+      - ${GITLAB_ROOT:-/boilerplate_gitlab}/grafana:/var/lib/grafana
     networks:
       gitlabnetwork:
-        ipv4_address: 172.21.0.7
+        ipv4_address: 172.20.0.7
 
 
 networks:
@@ -72,5 +72,5 @@ networks:
     driver: bridge
     ipam:
       config:
-        - subnet: 172.21.0.0/16
-          gateway: 172.21.0.1
+        - subnet: 172.20.0.0/16
+          gateway: 172.20.0.1

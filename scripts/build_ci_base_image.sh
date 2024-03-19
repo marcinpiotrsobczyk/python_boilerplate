@@ -1,12 +1,16 @@
-#! /bin/bash
+#!/usr/bin/env bash
 
 set -xeuo pipefail
+SCRIPTPATH="$( cd -- "$(dirname "$0")" >/dev/null 2>&1 ; pwd -P )"
+SCRIPTSDIR="${SCRIPTPATH}"
+SRCDIR="${SCRIPTSDIR}/.."
 
-# SCRIPTPATH="$( cd -- "$(dirname "$0")" >/dev/null 2>&1 ; pwd -P )"
+[[ -z ${PROJECT_NAME+z} ]] && echo "env variable PROJECT_NAME not defined" && exit 127
+[[ -z ${COMMIT+z} ]] && echo "env variable COMMIT not defined" && exit 127
+[[ -z ${LATEST_IMAGE_NAME+z} ]] && echo "env variable LATEST_IMAGE_NAME not defined" && exit 127
 
-COMMIT=${1:-"Missing commit sha"}
 
-docker build --progress=plain --target=cxx_boilerplate_image \
-  -t "cxx_boilerplate_image:$COMMIT" -f Dockerfile .
+docker build --progress=plain --target=image \
+  -t "${PROJECT_NAME}_image:${COMMIT}" -f Dockerfile "$SRCDIR"
 
-docker tag "cxx_boilerplate_image:$COMMIT" cxx_boilerplate_image
+docker tag "${PROJECT_NAME}_image:${COMMIT}" "${LATEST_IMAGE_NAME}"

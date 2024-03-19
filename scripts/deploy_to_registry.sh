@@ -1,4 +1,4 @@
-#!/usr/bin/bash
+#!/usr/bin/env bash
 #
 #
 # WARNING with gitlab version 16.6 new registration workflow must be adopted
