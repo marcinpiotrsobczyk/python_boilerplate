@@ -106,3 +106,4 @@ addopts = "--strict-markers"
 
 [tool.poetry.scripts]
 pb = "python_boilerplate.main:main"
+pb-dev = "python_boilerplate.dev:main"
