@@ -18,16 +18,36 @@ variables:
   GIT_SUBMODULE_STRATEGY: "recursive"
   CI_DEBUG_SERVICES: "true"
   FF_NETWORK_PER_BUILD: "true"
+  # colors:
+  TXT_GREEN: "\e[1;32m"
+  TXT_BLUE: "\e[1;34m"
+  TXT_CLEAR: "\e[0m"
+
 stages:
-  - lint
+  - static_code_analysis
   - test
   - deploy
 
 #>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>| STATIC CODE ANALYSIS |>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
+pre_commit_checks:
+  stage: static_code_analysis
+  script:
+    - poetry -V
+    - poetry install
+    - source $(poetry env info --path)/bin/activate
+    - echo -e "${TXT_BLUE}Checking all files with pre-commit hooks...${TXT_CLEAR}" &&
+      pre-commit run --all-files
+  artifacts:
+    when: always
+    expire_in: 1 week
+    paths:
+      - poetry.lock
+
+
 lint_code_with_ruff:
   stage:
-    lint
+    static_code_analysis
   script:
     - poetry install
     - source $(poetry env info --path)/bin/activate
@@ -37,7 +57,7 @@ lint_code_with_ruff:
 
 formatting_with_black_check:
   stage:
-    lint
+    static_code_analysis
   script:
     - poetry install
     - source $(poetry env info --path)/bin/activate
@@ -46,7 +66,7 @@ formatting_with_black_check:
 
 type_check_with_mypy:
   stage:
-    lint
+    static_code_analysis
   script:
     - poetry install
     - source $(poetry env info --path)/bin/activate
