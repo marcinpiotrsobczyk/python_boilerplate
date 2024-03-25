@@ -9,7 +9,6 @@
 set -xeuo pipefail
 SCRIPTPATH="$( cd -- "$(dirname "$0")" >/dev/null 2>&1 ; pwd -P )"
 SCRIPTSDIR="${SCRIPTPATH}"
-SRCDIR="${SCRIPTSDIR}/.."
 
 
 [[ -z ${PROJECT_NAME+z} ]] && echo "env variable PROJECT_NAME not defined" && exit 127
@@ -61,7 +60,6 @@ while [ $# -gt 0 ]; do
         exit 2
         ;;
     esac
-    shift
 done
 
 
