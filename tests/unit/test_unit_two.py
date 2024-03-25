@@ -23,6 +23,7 @@ def test_case_two(some_string: str, mine_param: str) -> None:
     logging.info(f"fixture second: {mine_param}")
 
 
+@pytest.mark.mymark
 def test_case_three() -> None:
     logging.info("from unit_two suite")
     img = Image.new(mode="RGB", size=(400, 300), color=(255, 0, 0))
