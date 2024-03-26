@@ -846,7 +846,33 @@ platformdirs = ">=3.9.1,<5"
 docs = ["furo (>=2023.7.26)", "proselint (>=0.13)", "sphinx (>=7.1.2)", "sphinx-argparse (>=0.4)", "sphinxcontrib-towncrier (>=0.2.1a0)", "towncrier (>=23.6)"]
 test = ["covdefaults (>=2.3)", "coverage (>=7.2.7)", "coverage-enable-subprocess (>=1)", "flaky (>=3.7)", "packaging (>=23.1)", "pytest (>=7.4)", "pytest-env (>=0.8.2)", "pytest-freezer (>=0.4.8)", "pytest-mock (>=3.11.1)", "pytest-randomly (>=3.12)", "pytest-timeout (>=2.1)", "setuptools (>=68)", "time-machine (>=2.10)"]
 
+[[package]]
+name = "xonsh"
+version = "0.15.1"
+description = "Python-powered, cross-platform, Unix-gazing shell"
+optional = false
+python-versions = ">=3.9"
+files = [
+    {file = "xonsh-0.15.1-py310-none-any.whl", hash = "sha256:f400e9426e1d47034e13acf125a3928cc4be644fdc202a87520b645a0b0e7aa9"},
+    {file = "xonsh-0.15.1-py311-none-any.whl", hash = "sha256:5e90f4e2514258910dda0718c76a15cf6bfbd875609a09b87ac1e5e696e7aeb7"},
+    {file = "xonsh-0.15.1-py312-none-any.whl", hash = "sha256:d3770486f0b85e940b7c9867d54ead4b675b30878fc549d5d2536c69e7f9b12a"},
+    {file = "xonsh-0.15.1-py39-none-any.whl", hash = "sha256:4cb64c7e15c85f6562f83bb2d6931d8d4a1a8b6c40b5603b66377f9926edb9b4"},
+    {file = "xonsh-0.15.1.tar.gz", hash = "sha256:34a6332b7a86f6fe86a74273585c59ab1f3c89292fda5a9eafe54c926bac4710"},
+]
+
+[package.extras]
+bestshell = ["prompt-toolkit (>=3.0.29)", "pygments (>=2.2)"]
+dev = ["pre-commit", "re-ver", "tomli", "xonsh[doc,test]"]
+doc = ["doctr", "furo", "livereload", "matplotlib", "myst-parser", "numpydoc", "psutil", "pyzmq", "runthis-sphinxext", "sphinx (>=3.1)", "tornado", "xonsh[bestshell]"]
+full = ["distro", "gnureadline", "setproctitle", "ujson", "xonsh[ptk,pygments]"]
+linux = ["distro"]
+mac = ["gnureadline"]
+proctitle = ["setproctitle"]
+ptk = ["prompt-toolkit (>=3.0.29,<3.0.41)", "pyperclip"]
+pygments = ["pygments (>=2.2)"]
+test = ["coverage (>=5.3.1)", "prompt-toolkit (>=3.0.29,<3.0.41)", "pygments (>=2.2)", "pyte (>=0.8.0)", "pytest (>=7)", "pytest-cov", "pytest-mock", "pytest-rerunfailures", "pytest-subprocess", "pytest-timeout", "restructuredtext-lint", "virtualenv (>=20.16.2)", "xonsh[bestshell]"]
+
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "ffff3c379c392c2bc800bbbf7a45cacba04af98d40528c87e3a555d629dc3db4"
+content-hash = "e9815c0312b938191e79c1733c0eba14a524a4c19b8e1481505e6a76c90bf05b"
