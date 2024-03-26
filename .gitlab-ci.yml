@@ -21,6 +21,8 @@ variables:
   TXT_BLUE: "\e[1;34m"
   TXT_CLEAR: "\e[0m"
 
+image: python_boilerplate_image
+
 stages:
   - static_code_analysis
   - test
