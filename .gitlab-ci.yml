@@ -95,7 +95,7 @@ example_test:
   script:
     - poetry install
     - source $(poetry env info --path)/bin/activate
-    - pytest --durations 0 -v
+    - pytest --durations 0 -n 4 -v
   artifacts:
     paths:
       - red-color-image.jpg
